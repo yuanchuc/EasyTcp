@@ -51,7 +51,7 @@ public:
 			printf("错误，建立Socket失败....\n");
 		}
 		else {
-			printf("建立Socket=<%d>成功....\n", (int)_sock);
+			//printf("建立Socket=<%d>成功....\n", (int)_sock);
 		}
 	}
 	//连接服务器
@@ -75,7 +75,7 @@ public:
 			return -1;
 		}
 		else {
-			printf("Socket=<%d>连接服务器<%s:%d>成功....\n", (int)_sock, ip, port);
+			//printf("Socket=<%d>连接服务器<%s:%d>成功....\n", (int)_sock, ip, port);
 		}
 		return ret;
 	}
@@ -200,9 +200,9 @@ public:
 		}
 	}
 	//发送数据
-	int SendData(DataHeader* header) {
+	int SendData(DataHeader* header,int nLen) {
 		if (isRun() && header) {
-			return send(_sock, (const char*)header, header->dataLength, 0);
+			return send(_sock, (const char*)header, nLen, 0);
 		}
 		return SOCKET_ERROR;
 	}

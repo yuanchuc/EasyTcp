@@ -1,4 +1,4 @@
-#define FD_SETSIZE 1024
+
 #include"EasyTcpServer.hpp"
 #include<thread>
 bool g_bRun = true;
@@ -25,7 +25,7 @@ int main() {
     server.InitSocket();
     server.Bind(nullptr, 4567);
     server.Listen(15);
-    
+    server.Start();
     std::thread t1(cmdThread);
     t1.detach();    //分离主线程，防止主线程退出后，子线程仍未退出导致问题
     
