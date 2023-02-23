@@ -24,12 +24,14 @@ void cmdThread() {
 //线程数量
 const int tCount = 4;
 //客户端数量
-const int cCount = 10000;
+const int cCount = 10;
 //客户端数组
 EasyTcpClient* client[cCount];
 
 void sendThread(int id) {
+    printf("thread<%d> start\n", id);
     //4个线程 ID (1-4)
+
     int c = cCount / tCount;
     int begin = (id - 1) * c;
     int end = id * c;
@@ -45,11 +47,12 @@ void sendThread(int id) {
             return;
         }
         client[i]->Connect("127.0.0.1", 4567);
-        printf("thread<%d> Connect = %d\n",id , i);
+        
     }
-    std::chrono::milliseconds t(5000);
+    printf("thread<%d> Connect <begin=%d,end=%d>\n",id, begin, end);
+    std::chrono::milliseconds t(3000);
     std::this_thread::sleep_for(t);
-    Login ret[10];
+    Login ret[1];
     for (int n = 0; n < 10; n++) {
         strcpy(ret[n].userName, "csd");
         strcpy(ret[n].PassWord, "123456");
@@ -61,14 +64,14 @@ void sendThread(int id) {
 
         for (int i = begin; i < end; i++) {
             client[i]->SendData(ret,sizeof(ret));
-            //client[i]->OnRun();
-        }
-        //printf("空闲时间处 理其他业务\n");
-        //Sleep(1000);      
+            client[i]->OnRun();
+        }   
     }
     for (int i = begin; i < cCount; i++) {
         client[i]->Close();
+        delete client[i];
     }
+    printf("thread<%d> close\n", id);
 }
 int main() {
     std::thread t1(cmdThread);
